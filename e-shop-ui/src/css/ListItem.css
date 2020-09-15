@@ -1,0 +1,43 @@
+.product-image {
+  width: 225px;
+  height: 180px;
+}
+
+.list-item {
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.product-item-name {
+  margin-bottom: 10px;
+}
+
+.product-rating {
+  margin-bottom: 10px;
+}
+
+.product-pricing {
+  margin-bottom: 10px;
+}
+
+.product-availability {
+  font-size: 12px;
+  line-height: 16px;
+  margin-bottom: 5px;
+}
+
+.check-mark {
+  fill: #308800;
+  height: 16px;
+  width: 16px;
+  margin: 0 4px 0 0;
+}
+
+.no-icon {
+  fill: #1d252c;
+  height: 16px;
+  width: 16px;
+  margin: 0 4px 0 0;
+}

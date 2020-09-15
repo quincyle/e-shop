@@ -7,6 +7,7 @@
   flex: 1 1 20%;
   min-width: 0;
   max-width: max;
+  background-color: '#a2b9bc'
 }
 
 .facet-container {
@@ -18,9 +19,4 @@
 .product-listing-container {
   flex: 1 1 75%;
   border-left: 1px solid #e0e6ef;
-}
-
-.product-image {
-  width: 225px;
-  height: 180px;
 }
