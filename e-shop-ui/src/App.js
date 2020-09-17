@@ -9,142 +9,78 @@ const dataProcessor = new DataProcessor()
 const localData = dataProcessor.AddRating(data)
 
 class App extends React.Component {
-  constructor () {
-    super()
-
-    this.state = {
-      isOnlineAvailable: false,
-      isStoreAvailable: false,
-      sortValue: 1,
-      data: localData,
-      filterData: localData,
-    }
+  state = {
+    isOnlineAvailable: false,
+    isStoreAvailable: false,
+    sortValue: 1,
+    data: localData
   }
 
   changeOnlineAvailability = (event) => {
-    const shouldFilterOnline = event.target.checked
-    const shouldFilterStore = this.state.isStoreAvailable
-
-    let filteredProducts = [...this.state.data.products]
-
-    if (shouldFilterOnline) {
-      filteredProducts = filteredProducts.filter(product => {
-        return product.onlineAvailability
-      })
-    }
-
-    if (shouldFilterStore) {
-      filteredProducts = filteredProducts.filter(product => {
-        return product.inStoreAvailability
-      })
-    }
-
-    const sortValue = this.state.sortValue
-
-    if (sortValue === 1) {
-      // no op
-    } else if (sortValue === 2) {
-      filteredProducts = filteredProducts.sort((a, b) => {
-        return b.salePrice - a.salePrice
-      })
-    } else if (sortValue === 3) {
-      filteredProducts = filteredProducts.sort((a, b) => {
-        return a.salePrice - b.salePrice
-      })
-    }
-
     this.setState({
-      ...this.state,
       [event.target.name]: event.target.checked,
-      filterData: {
-        ...this.state.data,
-        products: filteredProducts
-      }
     })
   }
 
   changeStoreAvailability = (event) => {
-    const shouldFilterOnline = this.state.isOnlineAvailable
-    const shouldFilterStore = event.target.checked
-
-    let filteredProducts = [...this.state.data.products]
-
-    if (shouldFilterOnline) {
-      filteredProducts = filteredProducts.filter(product => {
-        return product.onlineAvailability
-      })
-    }
-
-    if (shouldFilterStore) {
-      filteredProducts = filteredProducts.filter(product => {
-        return product.inStoreAvailability
-      })
-    }
-
-    const sortValue = this.state.sortValue
-
-    if (sortValue === 1) {
-      // no op
-    } else if (sortValue === 2) {
-      filteredProducts = filteredProducts.sort((a, b) => {
-        return b.salePrice - a.salePrice
-      })
-    } else if (sortValue === 3) {
-      filteredProducts = filteredProducts.sort((a, b) => {
-        return a.salePrice - b.salePrice
-      })
-    }
-
     this.setState({
-      ...this.state,
       [event.target.name]: event.target.checked,
-      filterData: {
-        ...this.state.data,
-        products: filteredProducts
-      }
     })
   }
 
   changeSort = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  processData = (data) => {
+    const clonedData = {
+      ...data,
+      products: [...data.products] || []
+    }
+
+    clonedData.products = this.filterByAvailability(clonedData.products)
+    clonedData.products = this.sortByPrice(clonedData.products)
+
+    return clonedData
+  }
+
+  filterByAvailability (items) {
     const shouldFilterOnline = this.state.isOnlineAvailable
     const shouldFilterStore = this.state.isStoreAvailable
-  
-    let filteredProducts = [...this.state.data.products]
+
+    let filteredItems = items
 
     if (shouldFilterOnline) {
-      filteredProducts = filteredProducts.filter(product => {
+      filteredItems = items.filter(product => {
         return product.onlineAvailability
       })
     }
 
     if (shouldFilterStore) {
-      filteredProducts = filteredProducts.filter(product => {
+      filteredItems = filteredItems.filter(product => {
         return product.inStoreAvailability
       })
     }
 
-    const sortValue = event.target.value
+    return filteredItems
+  }
 
+  sortByPrice = (items) => {
+    const sortValue = this.state.sortValue
+  
     if (sortValue === 1) {
-      // no op
+      return items
     } else if (sortValue === 2) {
-      filteredProducts = filteredProducts.sort((a, b) => {
+      return items.sort((a, b) => {
         return b.salePrice - a.salePrice
       })
     } else if (sortValue === 3) {
-      filteredProducts = filteredProducts.sort((a, b) => {
+      return items.sort((a, b) => {
         return a.salePrice - b.salePrice
       })
     }
-
-    this.setState({
-      ...this.state,
-      [event.target.name]: sortValue,
-      filterData: {
-        ...this.state.data,
-        products: filteredProducts
-      }
-    })
   }
 
   render () {
@@ -159,7 +95,7 @@ class App extends React.Component {
       >
         {/* <div className='facet-container'>facet</div> */}
         <List 
-          data={this.state.filterData}
+          data={this.processData(this.state.data)}
           isOnlineAvailable={this.props.isOnlineAvailable}
           isStoreAvailable={this.props.isStoreAvailable}
           sortValue={this.state.sortValue}
