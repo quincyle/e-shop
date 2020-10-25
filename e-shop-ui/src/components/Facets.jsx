@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -31,7 +31,7 @@ export class Facets extends React.Component {
 
     return filterableValuesByKeys
   } 
-  
+
   render () {
     return (
       <div className='facet-container'>
