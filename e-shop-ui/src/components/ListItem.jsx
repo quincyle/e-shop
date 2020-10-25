@@ -1,41 +1,40 @@
-import React from 'react'
-import Rating from '@material-ui/lab/Rating'
+import React from 'react';
+import Rating from '@material-ui/lab/Rating';
 
-import {ProductPrice} from 'components/ProductPrice'
-import {ProductAvailability} from 'components/ProductAvailability'
-import 'css/ListItem.css'
+import {ProductPrice} from 'components/ProductPrice';
+import {ProductAvailability} from 'components/ProductAvailability';
 
-export class ListItem extends React.Component {
-  render () {
-    return (
-      <div className="list-item">
-        <img
-          className="product-image"
-          src={this.props.data.image} 
-          alt={this.props.data.shortDescription}
-        >
-        </img>
+import 'css/ListItem.css';
 
-        <div className="product-item-name">{this.props.data.name}</div>
+export const ListItem = (props) => {
+  return (
+    <div className="list-item">
+      <img
+        className="product-image"
+        src={props.data.image} 
+        alt={props.data.shortDescription}
+      >
+      </img>
 
-        <Rating className="product-rating" value={this.props.data.rating} readOnly />
+      <div className="product-item-name">{props.data.name}</div>
 
-        <ProductPrice
-          regularPrice={this.props.data.regularPrice}
-          salePrice={this.props.data.salePrice}
-        />
+      <Rating className="product-rating" value={props.data.rating} readOnly />
 
-        <ProductAvailability 
-          availability={this.props.data.onlineAvailability}
-          trueMessage='Available online'
-          falseMessage='Sold out online'
-        />
-        <ProductAvailability 
-          availability={this.props.data.inStoreAvailability}
-          trueMessage='Available at nearby stores'
-          falseMessage='Sold out in nearby stores'
-        />
-      </div>
-    )
-  }
-}
+      <ProductPrice
+        regularPrice={props.data.regularPrice}
+        salePrice={props.data.salePrice}
+      />
+
+      <ProductAvailability 
+        availability={props.data.onlineAvailability}
+        trueMessage='Available online'
+        falseMessage='Sold out online'
+      />
+      <ProductAvailability 
+        availability={props.data.inStoreAvailability}
+        trueMessage='Available at nearby stores'
+        falseMessage='Sold out in nearby stores'
+      />
+    </div>
+  )
+};

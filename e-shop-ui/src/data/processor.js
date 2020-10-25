@@ -1,5 +1,4 @@
 export class DataProcessor {
-  constructor () {}
   AddRating (data) {
     return {
       ...data,
