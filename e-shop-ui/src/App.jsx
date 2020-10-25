@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { List } from 'components/List'
 import { Facets } from 'components/Facets'
-import data from 'local-data'
+import sourceData from 'local-data'
 import {DataProcessor} from 'data/processor'
 import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
@@ -11,14 +11,42 @@ import './App.css'
 
 const FILTER_ENUM_KEYS = ['manufacturer', 'condition', 'productAspectRatio']
 const dataProcessor = new DataProcessor()
-const localData = dataProcessor.AddRating(data)
 
 export default () => {
+  const data = dataProcessor.AddRating(sourceData)
+
   const [isOnlineAvailable, setOnlineAvailable] = useState(false);
   const [isStoreAvailable, setIsStoreAvailable] = useState(false);
   const [sortValue, setSortValue] = useState(1);
-  const [productFilters, setProductFilters] = useState(
-    localData.products.reduce((accumulator, current) => {
+  const [productFilters, setProductFilters] = useState(generateInitialFacetsFromData(data))
+
+  function handleIsisOnlineAvailableChange (event) {
+    setOnlineAvailable(event.target.checked)
+  }
+
+  function handleIsStoreAvailableChange(event) {
+    setIsStoreAvailable(event.target.checked)
+  }
+
+  function handleSortChange (event) {
+    setSortValue(event.target.value)
+  }
+
+  function handleFacetsChange (filterKey, event) {
+    setProductFilters({
+      ...productFilters,
+      [filterKey]: {
+        ...productFilters[filterKey],
+        [event.target.name]: {
+          ...productFilters[filterKey][event.target.name],
+          enabled: event.target.checked
+        }
+      }
+    })
+  }
+
+  function generateInitialFacetsFromData (data) {
+    return data.products.reduce((accumulator, current) => {
       FILTER_ENUM_KEYS.forEach(filterKey => {
         const filterValue = current[filterKey]
 
@@ -34,33 +62,6 @@ export default () => {
       })
       return accumulator
     }, {})
-  )
-
-  const data = localData
-
-  function changeOnlineAvailability (event) {
-    setOnlineAvailable(event.target.checked)
-  }
-
-  function changeStoreAvailability(event) {
-    setIsStoreAvailable(event.target.checked)
-  }
-
-  function changeSort (event) {
-    setSortValue(event.target.value)
-  }
-
-  function changeFacets (filterKey, event) {
-    setProductFilters({
-      ...productFilters,
-      [filterKey]: {
-        ...productFilters[filterKey],
-        [event.target.name]: {
-          ...productFilters[filterKey][event.target.name],
-          enabled: event.target.checked
-        }
-      }
-    })
   }
 
   function processData (data) {
@@ -174,7 +175,7 @@ export default () => {
           filters={productFilters}
           data={processData(data)}
 
-          onFacetsChange={changeFacets}
+          onFacetsChange={handleFacetsChange}
         />
         <List 
           data={processData(data)}
@@ -182,9 +183,9 @@ export default () => {
           isStoreAvailable={isStoreAvailable}
           sortValue={sortValue}
 
-          changeOnlineAvailability={changeOnlineAvailability}
-          changeStoreAvailability={changeStoreAvailability}
-          changeSort={changeSort}
+          changeOnlineAvailability={handleIsisOnlineAvailableChange}
+          changeStoreAvailability={handleIsStoreAvailableChange}
+          changeSort={handleSortChange}
         />
       </div>
     </div>
