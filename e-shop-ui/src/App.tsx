@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
 
 import { List } from 'components/List'
 import { Facets } from 'components/Facets'
@@ -8,31 +8,31 @@ import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
 
 import './App.css'
+import { Data, FACETS_KEYS, Product, TFacets } from 'types'
 
-const FILTER_ENUM_KEYS = ['manufacturer', 'condition', 'productAspectRatio']
-const dataProcessor = new DataProcessor()
+const dataProcessor = new DataProcessor(sourceData)
 
 export default () => {
-  const data = dataProcessor.AddRating(sourceData)
+  const data = dataProcessor.addRating().data
 
   const [isOnlineAvailable, setOnlineAvailable] = useState(false);
   const [isStoreAvailable, setIsStoreAvailable] = useState(false);
   const [sortValue, setSortValue] = useState(1);
   const [productFilters, setProductFilters] = useState(generateInitialFacetsFromData(data))
 
-  function handleIsisOnlineAvailableChange (event) {
+  function handleIsisOnlineAvailableChange (event: ChangeEvent<HTMLInputElement>) {
     setOnlineAvailable(event.target.checked)
   }
 
-  function handleIsStoreAvailableChange(event) {
+  function handleIsStoreAvailableChange(event: ChangeEvent<HTMLInputElement>) {
     setIsStoreAvailable(event.target.checked)
   }
 
-  function handleSortChange (event) {
-    setSortValue(event.target.value)
+  function handleSortChange (event: ChangeEvent<{value: unknown}>) {
+    setSortValue(event.target.value as number)
   }
 
-  function handleFacetsChange (filterKey, event) {
+  function handleFacetsChange (filterKey: FACETS_KEYS, event: ChangeEvent<HTMLInputElement>) {
     setProductFilters({
       ...productFilters,
       [filterKey]: {
@@ -45,9 +45,9 @@ export default () => {
     })
   }
 
-  function generateInitialFacetsFromData (data) {
+  function generateInitialFacetsFromData (data: Data): TFacets {
     return data.products.reduce((accumulator, current) => {
-      FILTER_ENUM_KEYS.forEach(filterKey => {
+      Object.values(FACETS_KEYS).forEach(filterKey => {
         const filterValue = current[filterKey]
 
         if (filterValue) {
@@ -61,10 +61,10 @@ export default () => {
         }
       })
       return accumulator
-    }, {})
+    }, {} as TFacets)
   }
 
-  function processData (data) {
+  function processData (data: Data) {
     const clonedData = {
       ...data,
       products: [...data.products] || []
@@ -77,7 +77,7 @@ export default () => {
     return clonedData
   }
 
-  function filterByFacets (items) {
+  function filterByFacets (items: Product[]) {
     const hasFacets = Object.entries(productFilters).some(([filterKey, filterValueHash]) => {
       return Object.entries(filterValueHash).some(([filterValue, filterValueEntry]) => {
         return filterValueEntry.enabled
@@ -90,6 +90,8 @@ export default () => {
 
     return items.filter(item => {
       return Object.entries(productFilters).every(([filterKey, filterValueHash]) => {
+        const castedFilterKey = filterKey as FACETS_KEYS
+        
         const filterValueSelected = Object.entries(filterValueHash).some(([filterValue, filterValueEntry]) => {
           return filterValueEntry.enabled
         })
@@ -99,13 +101,13 @@ export default () => {
         }
 
         return Object.entries(filterValueHash).some(([filterValue, filterValueEntry]) => {
-          return filterValueEntry.enabled && item[filterKey] === filterValue
+          return filterValueEntry.enabled && item[castedFilterKey] === filterValue
         })
       })
     })
   }
 
-  function filterByAvailability (items) {
+  function filterByAvailability (items: Product[]) {
     const shouldFilterOnline = isOnlineAvailable
     const shouldFilterStore = isStoreAvailable
 
@@ -126,17 +128,20 @@ export default () => {
     return filteredItems
   }
 
-  function sortByPrice (items) {
-    if (sortValue === 1) {
-      return items
-    } else if (sortValue === 2) {
-      return items.sort((a, b) => {
-        return b.salePrice - a.salePrice
-      })
-    } else if (sortValue === 3) {
-      return items.sort((a, b) => {
-        return a.salePrice - b.salePrice
-      })
+  function sortByPrice (items: Product[]): Product[] {
+    switch (sortValue) {
+      case 1:
+        return items
+      case 2:
+        return items.sort((a, b) => {
+          return b.salePrice - a.salePrice
+        })
+      case 3:
+        return items.sort((a, b) => {
+          return a.salePrice - b.salePrice
+        })
+      default:
+        return items
     }
   }
 
@@ -167,17 +172,17 @@ export default () => {
           </Toolbar>
         </AppBar>
       </div>
-      <div style={{margin: '20px 0', padding: '20px 0', fontSize: '22px', fontWeight: '400'}}>Gaming Monitors</div>
+      <div style={{margin: '20px 0', padding: '20px 0', fontSize: '22px', fontWeight: 400}}>Gaming Monitors</div>
       <div style={{
         display: 'flex',
       }}>
-        <Facets 
+        <Facets
           filters={productFilters}
           data={processData(data)}
 
           onFacetsChange={handleFacetsChange}
         />
-        <List 
+        <List
           data={processData(data)}
           isOnlineAvailable={isOnlineAvailable}
           isStoreAvailable={isStoreAvailable}

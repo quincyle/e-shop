@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -9,8 +9,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import 'css/Facets.css'
+import { Data, FACETS_KEYS, TFacets } from 'types'
 
-export const Facets = (props) => {
+type FacetsProps = {
+  filters: TFacets
+  data: Data
+
+  onFacetsChange: (filterKey: FACETS_KEYS, event: ChangeEvent<HTMLInputElement>) => void
+}
+
+export const Facets = (props: FacetsProps) => {
   return (
     <div className='facet-container'>
       {Object.entries(props.filters).map(([key, values]) => {
@@ -35,7 +43,7 @@ export const Facets = (props) => {
                         control={
                           <Checkbox
                             checked={filterValueEntry.enabled}
-                            onChange={(event) => props.onFacetsChange(key, event)}
+                            onChange={(event) => props.onFacetsChange(key as FACETS_KEYS, event)}
                             name={filterValue}
                             color="primary"
                           />

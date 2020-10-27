@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import {ListItem} from 'components/ListItem';
 import {ListControl} from 'components/ListControl';
+import { Data } from 'types';
 
-export const List = (props) => {
+type ListProps = {
+  data: Data
+  isOnlineAvailable: boolean
+  isStoreAvailable: boolean
+  sortValue: number
+
+  changeOnlineAvailability: (event: ChangeEvent<HTMLInputElement>) => void
+  changeStoreAvailability: (event: ChangeEvent<HTMLInputElement>) => void
+  changeSort: (event: ChangeEvent<{value: unknown}>) => void
+} & React.HTMLAttributes<HTMLDivElement>
+
+export const List = (props: ListProps): JSX.Element => {
   return (
     <div className='product-listing-container'>
       <ListControl

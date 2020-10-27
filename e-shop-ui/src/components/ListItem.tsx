@@ -5,8 +5,13 @@ import {ProductPrice} from 'components/ProductPrice';
 import {ProductAvailability} from 'components/ProductAvailability';
 
 import 'css/ListItem.css';
+import { Product } from 'types';
 
-export const ListItem = (props) => {
+type ListProps = {
+  data: Product
+} & React.HTMLAttributes<HTMLDivElement>
+
+export const ListItem = (props: ListProps) => {
   return (
     <div className="list-item">
       <img
@@ -18,6 +23,8 @@ export const ListItem = (props) => {
 
       <div className="product-item-name">{props.data.name}</div>
 
+{/*
+// @ts-ignore */}
       <Rating className="product-rating" value={props.data.rating} readOnly />
 
       <ProductPrice

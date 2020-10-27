@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -8,7 +8,18 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import 'css/List.css';
 
-export const ListControl = (props) => {
+type ListControlProps = {
+  count: number
+  isOnlineAvailable: boolean
+  isStoreAvailable: boolean
+  sortValue: number
+
+  changeOnlineAvailability: (event: ChangeEvent<HTMLInputElement>) => void
+  changeStoreAvailability: (event: ChangeEvent<HTMLInputElement>) => void
+  changeSort: (event: ChangeEvent<{value: unknown}>) => void
+} & React.HTMLAttributes<HTMLDivElement>
+
+export const ListControl = (props: ListControlProps) => {
   return (
     <div className="product-list-control">
       <div style={{padding: '8px 0', flex: '3'}}>{props.count} {props.count > 1 ? 'results' : 'result'}</div>

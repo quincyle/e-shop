@@ -1,6 +1,12 @@
 import React from 'react';
 
-export const ProductAvailability = (props) => {
+type ProductAvailabilityProps = {
+  availability: boolean | undefined
+  trueMessage: 'Available online' | 'Available at nearby stores'
+  falseMessage: 'Sold out online' | 'Sold out in nearby stores'
+} & React.HTMLAttributes<HTMLDivElement>
+
+export const ProductAvailability = (props: ProductAvailabilityProps) => {
   const {availability, trueMessage, falseMessage} = props;
 
   return (
