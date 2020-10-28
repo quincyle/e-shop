@@ -11,6 +11,19 @@ import Checkbox from '@material-ui/core/Checkbox'
 import 'css/Facets.css'
 import { Data, FACETS_KEYS, TFacets } from 'types'
 
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+  root: {
+    '& span': {
+      fontSize: 12
+    }
+  },
+  bold: {
+    fontWeight: 600
+  }
+})
+
 type FacetsProps = {
   filters: TFacets
   data: Data
@@ -19,6 +32,8 @@ type FacetsProps = {
 }
 
 export const Facets = (props: FacetsProps) => {
+  const classes = useStyles()
+
   return (
     <div className='facet-container'>
       {Object.entries(props.filters).map(([key, values]) => {
@@ -31,15 +46,15 @@ export const Facets = (props: FacetsProps) => {
                 expandIcon={<ExpandMoreIcon />}
                 id="panel1a-header"
               >
-                <Typography className="facet-key">{key.toUpperCase()}</Typography>
+                <Typography className={classes.bold}>{key.toUpperCase()}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                   {Object.entries(values).map(([filterValue, filterValueEntry]) => {
                     return (
                       <FormControlLabel
-                        className="facet-value-item"
-                        key={filterValue}
+                      className={classes.root}
+                      key={filterValue}
                         control={
                           <Checkbox
                             checked={filterValueEntry.enabled}
