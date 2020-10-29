@@ -7,8 +7,8 @@ import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import Box from '@material-ui/core/Box'
 
-import 'css/Facets.css'
 import { Data, FACETS_KEYS, TFacets } from 'types'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -49,7 +49,7 @@ export const Facets = (props: FacetsProps) => {
                 <Typography className={classes.bold}>{key.toUpperCase()}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
+                <Box display='flex' flexDirection='column'>
                   {Object.entries(values).map(([filterValue, filterValueEntry]) => {
                     return (
                       <FormControlLabel
@@ -67,7 +67,7 @@ export const Facets = (props: FacetsProps) => {
                       />
                     )
                   })}
-                </div>
+                </Box>
               </AccordionDetails>
             </Accordion>
           </div>

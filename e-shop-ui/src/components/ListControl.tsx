@@ -5,8 +5,7 @@ import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-
-import 'css/List.css';
+import Box from '@material-ui/core/Box';
 
 type ListControlProps = {
   count: number
@@ -20,10 +19,11 @@ type ListControlProps = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 export const ListControl = (props: ListControlProps) => {
+  //template
   return (
-    <div className="product-list-control">
-      <div style={{padding: '8px 0', flex: '3'}}>{props.count} {props.count > 1 ? 'results' : 'result'}</div>
-      <div style={{marginLeft: '10px'}}>
+    <Box display='flex' flexDirection='row' p={2}>
+      <Box px={0}  py={1} flex={3}>{props.count} {props.count > 1 ? 'results' : 'result'}</Box>
+      <Box ml={1}>
         <FormControlLabel 
           control={
             <Switch
@@ -36,8 +36,8 @@ export const ListControl = (props: ListControlProps) => {
           label='Available online'
           labelPlacement='start'
         />
-      </div>
-      <div style={{marginLeft: '10px'}}>
+      </Box>
+      <Box ml={1}>
         <FormControlLabel 
           control={
             <Switch
@@ -50,8 +50,8 @@ export const ListControl = (props: ListControlProps) => {
           label='Available in store'
           labelPlacement='start'
         />
-      </div>
-      <div style={{marginLeft: '40px'}}>
+      </Box>
+      <Box ml={5}>
         <InputLabel>Sort</InputLabel>
         <Select
           style={{minWidth: '150px'}}
@@ -65,7 +65,7 @@ export const ListControl = (props: ListControlProps) => {
           <MenuItem value={2}>Price high to low</MenuItem>
           <MenuItem value={3}>Price low to high</MenuItem>
         </Select>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

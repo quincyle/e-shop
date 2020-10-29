@@ -4,7 +4,7 @@ import { List } from 'components/List'
 import { Facets } from 'components/Facets'
 import sourceData from 'local-data'
 import {DataProcessor} from 'data/processor'
-import { AppBar, createMuiTheme, IconButton, Toolbar, Typography, Paper, CssBaseline, Theme } from '@material-ui/core'
+import { AppBar, createMuiTheme, IconButton, Toolbar, Typography, Paper, CssBaseline, Theme, Box } from '@material-ui/core'
 import GitHubIcon from '@material-ui/icons/GitHub'
 import { ThemeProvider } from '@material-ui/core/styles'
 import Brightness4Icon from '@material-ui/icons/Brightness4';
@@ -184,18 +184,13 @@ export default () => {
     // window.location.href = "https://github.com/quincyle/e-shop/tree/master/e-shop-ui"
   }
 
+  // template
   return (
     <>
       <CssBaseline />
       <ThemeProvider theme={theme}>
         <Paper>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: '1280px',
-            margin: '0 auto',
-            position: 'relative',
-          }}>
+          <Box position='relative' display='flex' flexDirection='column' maxWidth={1280} my={0} mx='auto'>
             <div>
               <AppBar position="static">
                 <Toolbar>
@@ -205,40 +200,40 @@ export default () => {
                   {/* <Button color="inherit">Login</Button> */}
                   <IconButton edge="end" color="inherit" aria-label="menu"
                     onClick={clickGithubIcon}
-                  >
+                    >
                     <GitHubIcon />
                   </IconButton>
                   <IconButton edge="end" color="inherit" aria-label="menu"
                     onClick={() => handleThemeChange(theme)}
-                  >
+                    >
                     {theme.palette.type === 'light'? <Brightness4Icon /> : <Brightness7Icon />}
                   </IconButton>
                 </Toolbar>
               </AppBar>
             </div>
-            <div style={{margin: '20px 0', padding: '20px 0', fontSize: '22px', fontWeight: 400}}>Gaming Monitors</div>
+            <Typography variant='h5'>
+              <Box my={4}>Gaming Monitors</Box>
+            </Typography>
 
-            <div style={{
-              display: 'flex',
-            }}>
+            <Box display='flex'>
               <Facets
                 filters={productFilters}
                 data={processData(data)}
-
+                
                 onFacetsChange={handleFacetsChange}
-              />
+                />
               <List
                 data={processData(data)}
                 isOnlineAvailable={isOnlineAvailable}
                 isStoreAvailable={isStoreAvailable}
                 sortValue={sortValue}
-
+                
                 changeOnlineAvailability={handleIsisOnlineAvailableChange}
                 changeStoreAvailability={handleIsStoreAvailableChange}
                 changeSort={handleSortChange}
-              />
-            </div>
-          </div>
+                />
+            </Box>
+          </Box>
         </Paper>
       </ThemeProvider>
     </>
